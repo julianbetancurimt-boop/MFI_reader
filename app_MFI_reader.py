@@ -39,10 +39,14 @@ with col2:
                     if texto_pagina:
                         texto_completo += texto_pagina + "\n"
             
-            # Buscar el valor del MFI
-            patron_mfi = re.search(r'(?:MFI|Melt Index|Índice de fluidez).*?(\d+[\.,]?\d*(?:\s*-\s*\d+[\.,]?\d*)?)', texto_completo, re.IGNORECASE)
+            # --- CORRECCIÓN DEL REGEX ---
+            # 1. Buscamos las palabras clave (MFI, Melt Index, etc.)
+            # 2. Ignoramos contenido opcional entre paréntesis (ej: condiciones de prueba)
+            # 3. Capturamos el valor numérico (incluyendo rangos)
+            patron_mfi = re.search(r'(?:MFI|Melt Index|Índice de fluidez).*?(?:\([^\)]*\))?\s*(\d+[\.,]?\d*(?:\s*-\s*\d+[\.,]?\d*)?)', texto_completo, re.IGNORECASE)
             
             if patron_mfi:
+                # El valor correcto es el primer grupo de captura
                 valor_extraido = patron_mfi.group(1)
                 
                 # Caja de alto impacto visual
@@ -65,4 +69,4 @@ with col2:
         st.info("Esperando documento... Por favor, carga un archivo PDF en la sección de la izquierda.")
 
 st.markdown("---")
-st.caption("Prototipo funcional generado para demostración gerencial. No almacena datos en la nube pública.")
+# Nota: La caption de pie de página ha sido eliminada.
